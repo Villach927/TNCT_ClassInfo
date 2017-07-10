@@ -1,11 +1,10 @@
 <?php
 
-function getContent(DateTime $date){
-
-	$m = $date->format("Ym");
+function getContents(DateTime $date){
+	$month = $date->format("Ym");
 
 	$dom = new DOMDocument;
-	@$dom->loadHTMLFile("http://www.tsuyama-ct.ac.jp/oshiraseVer4/renraku/renraku" . $m . ".html");
+	@$dom->loadHTMLFile("http://www.tsuyama-ct.ac.jp/oshiraseVer4/renraku/renraku" . $month . ".html");
 	$xpath = new DOMXPath($dom);
 	$entries = [];
 
