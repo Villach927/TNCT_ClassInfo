@@ -1,10 +1,17 @@
 <?php
 
 function parseContents(array $contents){
-	$parsedContents = [];
-	foreach ($contents as $class) {
+	$analysisedContents = [];
+	$borders = ["授業変更", "補講", "休講", "教室変更"];
+	$i = -1;
+	foreach($contents as $class) {
 		$class = trim($class);
-		if($class !== "") $parsedContents[] = $class;
+		if(in_array($class, $borders)){
+			++$i;
+		}else if($i >= 0 && $class !== ""){
+			$analysisedContents[$i][] = $class;
+		}
 	}
-	return $parsedContents;
+
+	return $analysisedContents;
 }
