@@ -9,7 +9,9 @@ function parseContents(array $contents){
 		if(in_array($class, $borders)){
 			++$i;
 		}else if($i >= 0 && $class !== ""){
-			$analysisedContents[$i][] = $class;
+			$date = substr($class, 0, strpos($class, " "));
+			$info = substr($class, strpos($class, " "));
+			$analysisedContents[$i][] = ["date" => $date, "info" => trim($info)];
 		}
 	}
 
