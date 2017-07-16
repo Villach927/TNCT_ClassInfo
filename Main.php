@@ -13,3 +13,9 @@ $classes = parseContents($contents);
 var_dump($classes);
 
 $pdo = prepareDB();
+
+$connection = connectToTwitter();
+
+$res = $connection->post("statuses/update", array("status" => "テスト"));
+
+var_dump($res);
