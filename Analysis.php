@@ -9,9 +9,11 @@ function parseContents(array $contents){
 		if(in_array($class, $borders)){
 			++$i;
 		}else if($i >= 0 && $class !== ""){
-			$date = substr($class, 0, strpos($class, " "));
-			$info = substr($class, strpos($class, " "));
-			$analysisedContents[$i][] = ["date" => $date, "info" => trim($info)];
+			if(strpos($class, "日")  && strpos($class, "月") !== false){
+				$date = new DateTime(date("Y") . "-" . str_replace("月", "-", substr(substr($class, 0, strpos($class, " ")), 0, strpos($class, "日"))));
+				$info = substr($class, strpos($class, " "));
+				$analysisedContents[$i][] = ["date" => $date, "info" => trim($info)];
+			}
 		}
 	}
 

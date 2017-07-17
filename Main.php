@@ -14,8 +14,10 @@ var_dump($classes);
 
 $pdo = prepareDB();
 
+for($i = 0;$i < count($classes);++$i){
+	foreach ($classes[$i] as $class) {
+		inputClassRecord($pdo, $class["date"], $class["info"], $i, 0);
+	}
+}
+
 $connection = connectToTwitter();
-
-$res = $connection->post("statuses/update", array("status" => "テスト"));
-
-var_dump($res);
