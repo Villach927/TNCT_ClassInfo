@@ -1,6 +1,6 @@
 <?php
 
-function prepareDB(){
+function prepareDB() {
 	try {
 	    $pdo = new PDO('sqlite:Classes.db');
 
@@ -30,7 +30,7 @@ function prepareDB(){
 	return $pdo;
 }
 
-function inputClassRecord(PDO $pdo, $date, $info, $type, $count){
+function inputClassRecord (PDO $pdo, $date, $info, $type, $count) {
 	$statement = $pdo->prepare("INSERT INTO classes (date, info, type, count) VALUES (?, ?, ?, ?)");
 
 	$statement->bindValue(1, $date);
@@ -43,14 +43,14 @@ function inputClassRecord(PDO $pdo, $date, $info, $type, $count){
 	return $statement->fetch();
 }
 
-function getClassRecords(PDO $pdo){
+function getClassRecords (PDO $pdo) {
 	$statement = $pdo->prepare("SELECT id, date, info, type, count FROM classes");
 	$statement->execute();
 
 	return $statement->fetchAll();
 }
 
-function updateClassRecord(PDO $pdo, $id) {
+function updateClassRecord (PDO $pdo, $id) {
 	$statement = $pdo->prepare("UPDATE classes SET count = 1 WHERE id = ?");
 
 	$statement->bindValue(1, intval($id));

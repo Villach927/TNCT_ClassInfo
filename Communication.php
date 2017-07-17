@@ -3,7 +3,7 @@
 require_once("twitteroauth/autoload.php");
 use Abraham\TwitterOAuth\TwitterOAuth;
 
-function getContents(DateTime $date){
+function getContents (DateTime $date) {
 	$month = $date->format("Ym");
 
 	$dom = new DOMDocument;
@@ -11,16 +11,16 @@ function getContents(DateTime $date){
 	$xpath = new DOMXPath($dom);
 	$entries = [];
 
-	foreach($xpath->query('//div[@id="contents"]') as $node) {
+	foreach ($xpath->query('//div[@id="contents"]') as $node) {
 	    return $node->textContent;
 	}
 
 }
 
-function connectToTwitter(){
+function connectToTwitter () {
 	$token = file(__DIR__ . '/token.txt');
 
-	for($i = 0;$i < count($token);++$i){
+	for ($i = 0;$i < count($token);++$i) {
 		$token[$i] = trim($token[$i]);
 	}
 

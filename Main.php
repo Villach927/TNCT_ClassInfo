@@ -21,7 +21,7 @@ $notRecordedClasses = [];
 
 //DBから取得した記録済みのデータとWebサイトから取得したデータを比較し，新規更新分のみを取り出す
 //array_diffすると怒られるのでクソザコforeachくんで
-foreach($classes as $class){
+foreach ($classes as $class) {
 	$f = 0;
 	foreach ($recordedClasses as $rclass) {
 		$rclass = ["date" => $rclass["date"], "info" => $rclass["info"], "type" => $rclass["type"]];
@@ -30,7 +30,7 @@ foreach($classes as $class){
 			break;
 		}
 	}
-	if($f === 0){
+	if ($f === 0) {
 		$notRecordedClasses[] = $class;
 	}
 }
@@ -57,7 +57,7 @@ foreach ($notRecordedClasses as $class) {
 foreach ($recordedClasses as $class) {
 	$cdate = new DateTime();
 	$cdate->setTimeStamp($class["date"]);
-	if (intval($class["count"]) === 0 && intval($class["date"]) - intval(date("U")) < 172800 && intval($class["date"]) - intval(date("U")) > 0){
+	if (intval($class["count"]) === 0 && intval($class["date"]) - intval(date("U")) < 172800 && intval($class["date"]) - intval(date("U")) > 0) {
 		$strDate = $cdate->format("m月d日");
 		$message = strval("【" . $types[$class["type"]]) . "】" . $strDate . "\n" . $class["info"];
 		$res = $connection->post("statuses/update", ["status" => $message]);
