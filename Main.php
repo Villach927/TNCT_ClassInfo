@@ -1,8 +1,12 @@
 <?php
 
+date_default_timezone_set('Asia/Tokyo');
+
 require_once("Communication.php");
 require_once("Analysis.php");
 require_once("DB.php");
+
+$types = ["授業変更", "補講", "休講", "教室変更"];
 
 $date = new DateTime();
 
@@ -20,6 +24,7 @@ $notRecordedClasses = [];
 foreach($classes as $class){
 	$f = 0;
 	foreach ($recordedClasses as $rclass) {
+		$rclass = ["date" => $rclass["date"], "info" => $rclass["info"], "type" => $rclass["type"]];
 		if($class == $rclass){
 			$f = 1;
 			break;
@@ -32,11 +37,30 @@ foreach($classes as $class){
 
 //新規更新分をDBに記録する
 foreach ($notRecordedClasses as $nrclass) {
-	inputClassRecord($pdo, $nrclass["date"], $nrclass["info"], $nrclass["type"], 0);
+	$res = inputClassRecord($pdo, $nrclass["date"], $nrclass["info"], $nrclass["type"], 0);
 }
 
 
 //実行時の日付に応じてつぶやく
 //授業変更，補講，休講，教室変更の情報追加時，および1日前
-
 $connection = connectToTwitter();
+
+foreach ($notRecordedClasses as $class) {
+	$date = new DateTime();
+	$date->setTimeStamp($class["date"]);
+	$strDate = $date->format("m月d日");
+	$message = strval("新規追加情報：\n" . "【" . $types[$class["type"]]) . "】" . $strDate . "\n" . $class["info"];
+	$res = $connection->post("statuses/update", ["status" => $message]);
+}
+
+//ごちゃごちゃしてる……
+foreach ($recordedClasses as $class) {
+	$cdate = new DateTime();
+	$cdate->setTimeStamp($class["date"]);
+	if (intval($class["count"]) === 0 && intval($class["date"]) - intval(date("U")) < 172800 && intval($class["date"]) - intval(date("U")) > 0){
+		$strDate = $cdate->format("m月d日");
+		$message = strval("【" . $types[$class["type"]]) . "】" . $strDate . "\n" . $class["info"];
+		$res = $connection->post("statuses/update", ["status" => $message]);
+		updateClassRecord($pdo, $class["id"]);
+	}
+}

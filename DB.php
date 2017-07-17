@@ -14,10 +14,11 @@ function prepareDB(){
 			3……休講
 			4……教室変更
 	    */
+
 	    $pdo->exec("CREATE TABLE IF NOT EXISTS classes(
 	        id INTEGER PRIMARY KEY AUTOINCREMENT,
 	        date TEXT,
-	        info TEXT UNIQUE,
+	        info TEXT,
 	        type INTEGER,
 	        count INTEGER
 	    )");
@@ -43,8 +44,16 @@ function inputClassRecord(PDO $pdo, $date, $info, $type, $count){
 }
 
 function getClassRecords(PDO $pdo){
-	$statement = $pdo->prepare("SELECT date, info, type FROM classes");
+	$statement = $pdo->prepare("SELECT id, date, info, type, count FROM classes");
 	$statement->execute();
 
 	return $statement->fetchAll();
+}
+
+function updateClassRecord(PDO $pdo, $id) {
+	$statement = $pdo->prepare("UPDATE classes SET count = 1 WHERE id = ?");
+
+	$statement->bindValue(1, intval($id));
+
+	return $statement->execute();
 }
