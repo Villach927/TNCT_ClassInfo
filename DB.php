@@ -17,7 +17,7 @@ function prepareDB(){
 	    $pdo->exec("CREATE TABLE IF NOT EXISTS classes(
 	        id INTEGER PRIMARY KEY AUTOINCREMENT,
 	        date TEXT,
-	        info TEXT,
+	        info TEXT UNIQUE,
 	        type INTEGER,
 	        count INTEGER
 	    )");
@@ -29,10 +29,10 @@ function prepareDB(){
 	return $pdo;
 }
 
-function inputClassRecord(PDO $pdo, DateTime $date, $info, $type, $count){
+function inputClassRecord(PDO $pdo, $date, $info, $type, $count){
 	$statement = $pdo->prepare("INSERT INTO classes (date, info, type, count) VALUES (?, ?, ?, ?)");
 
-	$statement->bindValue(1, $date->format("U"));
+	$statement->bindValue(1, $date);
 	$statement->bindValue(2, $info);
 	$statement->bindValue(3, $type);
 	$statement->bindValue(4, $count);
@@ -40,4 +40,11 @@ function inputClassRecord(PDO $pdo, DateTime $date, $info, $type, $count){
 	$statement->execute();
 
 	return $statement->fetch();
+}
+
+function getClassRecords(PDO $pdo){
+	$statement = $pdo->prepare("SELECT date, info, type FROM classes");
+	$statement->execute();
+
+	return $statement->fetchAll();
 }

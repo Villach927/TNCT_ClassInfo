@@ -12,7 +12,7 @@ function parseContents(array $contents){
 			if(strpos($class, "日")  && strpos($class, "月") !== false){
 				$date = new DateTime(date("Y") . "-" . str_replace("月", "-", substr(substr($class, 0, strpos($class, " ")), 0, strpos($class, "日"))));
 				$info = substr($class, strpos($class, " "));
-				$analysisedContents[$i][] = ["date" => $date, "info" => trim($info)];
+				$analysisedContents[] = ["date" => $date->format("U"), "info" => trim($info), "type" => $i];
 			}
 		}
 	}

@@ -24,8 +24,6 @@ function connectToTwitter(){
 		$token[$i] = trim($token[$i]);
 	}
 
-	var_dump($token);
-
 	$connection = new TwitterOAuth($token[0], $token[1], $token[2], $token[3]);
 
 	return $connection;
